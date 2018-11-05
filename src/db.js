@@ -18,16 +18,16 @@ const dataBase = {}
           res(req1.result)
         }
         
+        req.onupgradeneeded = (evt) => {
+          
+          var objectStore = evt.currentTarget.result.createObjectStore("form", { autoIncrement : true })
+          // objectStore.createIndex("name", "name", { unique: false });
+          // objectStore.createIndex("email", "email", { unique: true });
+        
+        }
       };
 
     })
-    req.onupgradeneeded = (evt) => {
-      
-      var objectStore = evt.currentTarget.result.createObjectStore("form", { autoIncrement : true })
-      // objectStore.createIndex("name", "name", { unique: false });
-      // objectStore.createIndex("email", "email", { unique: true });
-    
-    }
   }
   
   dataBase.getObjectStore = (store_name, mode) => {
