@@ -23,7 +23,10 @@ class App extends Component {
     let data = JSON.parse(localStorage.forms);
     this.setState({data});
     let data1 = dataBase.openDB()
-    data1.then((data) => this.setState({data1:data}))
+    if(data1 !== undefined){
+
+      data1.then((data) => this.setState({data1:data}))
+    }
     
   };
   

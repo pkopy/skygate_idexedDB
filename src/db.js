@@ -7,27 +7,35 @@ const dataBase = {}
   dataBase.data = []
   dataBase.openDB = () => {
     let req = indexedDB.open(dataBase.dbName, 2);
-    return new Promise((res) => {
-      req.onsuccess = function (evt) {
-        dataBase.db = this.result;
-        console.log("openDb DONE");
-        let tx = dataBase.db.transaction(['form'])
-        let objStore = tx.objectStore('form');
-        let req1 = objStore.getAll()
-        req1.onsuccess = (e) => {
-          res(req1.result)
-        }
-        
-        req.onupgradeneeded = (evt) => {
+    if(dataBase.db.transaction) {
+      return new Promise((res) => {
+        req.onsuccess = function (evt) {
+          dataBase.db = this.result;
+          console.log("openDb DONE");
+          let tx = dataBase.db.transaction(['form'])
+          let objStore = tx.objectStore('form');
+          let req1 = objStore.getAll()
+          req1.onsuccess = (e) => {
+            res(req1.result)
+          }
           
-          var objectStore = evt.currentTarget.result.createObjectStore("form", { autoIncrement : true })
-          // objectStore.createIndex("name", "name", { unique: false });
-          // objectStore.createIndex("email", "email", { unique: true });
+        };
         
-        }
-      };
+      })
 
-    })
+    }else {
+      req.onsuccess = function(evt) {
+        dataBase.db = this.result; 
+        console.log("openDb DONE");
+      }
+      req.onupgradeneeded = (evt) => {
+        
+        var objectStore = evt.currentTarget.result.createObjectStore("form", { autoIncrement : true })
+        objectStore.createIndex("token", "token", { unique: false });
+        // objectStore.createIndex("email", "email", { unique: true });
+      
+      }
+    }
   }
   
   dataBase.getObjectStore = (store_name, mode) => {
@@ -51,7 +59,7 @@ const dataBase = {}
   // dataBase.getAll = 
  
   dataBase.add = (obj) => {
-    const cust = { ssn: "444-44-4441", name: "Billpx", age: 35, email: "bxxxillix@compakny.com" };
+    
     var store = dataBase.getObjectStore("form", "readwrite");
     var req;
     try {
