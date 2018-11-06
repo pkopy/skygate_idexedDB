@@ -23,6 +23,7 @@ class App extends Component {
     let data = JSON.parse(localStorage.forms);
     this.setState({data});
     let data1 = dataBase.openDB()
+    console.log(data1)
     if(data1 !== undefined){
 
       data1.then((data) => this.setState({data1:data}))
@@ -84,9 +85,11 @@ class App extends Component {
   };
 
   delete = (subInput) => {
+    console.log(subInput.token)
     for(let obj of this.state.data) {
       this.findToken(obj, subInput)
     };
+    dataBase.delete(subInput.token)
   };
 
   createRandomString = (strLength) => {

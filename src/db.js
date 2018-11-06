@@ -30,8 +30,8 @@ const dataBase = {}
       }
       req.onupgradeneeded = (evt) => {
         
-        var objectStore = evt.currentTarget.result.createObjectStore("form", { autoIncrement : true })
-        objectStore.createIndex("token", "token", { unique: false });
+        var objectStore = evt.currentTarget.result.createObjectStore("form", { keyPath : "token" })
+        // objectStore.createIndex("token", "token", { unique: false });
         // objectStore.createIndex("email", "email", { unique: true });
       
       }
@@ -54,6 +54,18 @@ const dataBase = {}
         res(req.result)
       }
     })
+  }
+
+  dataBase.delete = (token) => {
+    let req = dataBase.db.transaction(['form'], "readwrite")
+    .objectStore('form')
+    .delete(token)
+    req.onsuccess = (e) => {
+      console.log('delete')
+    }
+    
+    
+    
   }
 
   // dataBase.getAll = 
