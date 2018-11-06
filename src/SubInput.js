@@ -25,9 +25,10 @@ class SubInput extends Component {
             subInput.answer = values.answer;
             subInput.equals = (!condition) ?  'Equals' : condition.value;
             subInput.type = type.value;
-            subInputs.push({token, parentType: type.value, parentToken : this.props.subInput.token});
+            let newSub = {token, parentType: type.value, parentToken : this.props.subInput.token}
+            subInputs.push(newSub);
             subInput.subInputs = subInputs;
-            this.props.changeSubInput();
+            this.props.changeSubInput(newSub);
         } else {
             alert('You must fill in all fields')
         }
@@ -37,7 +38,7 @@ class SubInput extends Component {
         let subInput = this.props.subInput;
         let key = e.target.name;
         subInput[key] = e.target.value;
-        this.props.changeSubInput();
+        // this.props.changeSubInput();
     };
 
     delete = (e) => {

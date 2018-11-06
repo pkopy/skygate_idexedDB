@@ -22,16 +22,19 @@ class App extends Component {
     };
     let data = JSON.parse(localStorage.forms);
     this.setState({data});
-    let data1 = dataBase.openDB()
-    console.log(data1)
-    if(data1 !== undefined){
+    setTimeout(() =>{
+      let data1 = dataBase.data
+      data1.then(data => this.setState({data1:data}))
 
-      data1.then((data) => this.setState({data1:data}))
-    }
+    },1000)
+    // if(data1 !== undefined){
+
+    //   data1.then((data) => this.setState({data1:data}))
+    // }
     
   };
   
-
+  
 
   componentDidUpdate() {
     let data = this.state.data;
@@ -90,6 +93,8 @@ class App extends Component {
       this.findToken(obj, subInput)
     };
     dataBase.delete(subInput.token)
+    dataBase.get().then((data) => {this.setState({data1:data})})
+    
   };
 
   createRandomString = (strLength) => {
@@ -121,9 +126,11 @@ class App extends Component {
   }
   
 
-  changeSubInput = () => {
+  changeSubInput = (input) => {
+    console.log(input)
     let data = this.state.data
     this.setState({data:data})
+    dataBase.add(input)
     this.addToDB();
     
   }

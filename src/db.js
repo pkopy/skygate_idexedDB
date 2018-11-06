@@ -5,44 +5,63 @@ const dataBase = {}
   dataBase.dbName = "forms";
   dataBase.db = {};
   dataBase.data = []
-  dataBase.openDB = () => {
+  dataBase.openDB = (() => {
     let req = indexedDB.open(dataBase.dbName, 2);
-    if(dataBase.db.transaction) {
-      return new Promise((res) => {
+    console.log(req)
+    // if(req) {
+      
         req.onsuccess = function (evt) {
           dataBase.db = this.result;
           console.log("openDb DONE");
-          let tx = dataBase.db.transaction(['form'])
-          let objStore = tx.objectStore('form');
-          let req1 = objStore.getAll()
-          req1.onsuccess = (e) => {
-            res(req1.result)
-          }
+          // let tx = dataBase.db.transaction(['form'])
+          // let objStore = tx.objectStore('form');
+          // let req1 = objStore.getAll()
+          // return new Promise ((res) =>{
+          //   req1.onsuccess = (e) => {
+          //     res(req1.result)
+          //   }
+
+          // })
+          dataBase.data = dataBase.get()
+          
           
         };
         
-      })
-
-    }else {
-      req.onsuccess = function(evt) {
-        dataBase.db = this.result; 
-        console.log("openDb DONE");
-      }
-      req.onupgradeneeded = (evt) => {
+        req.onupgradeneeded = (evt) => {
         
-        var objectStore = evt.currentTarget.result.createObjectStore("form", { keyPath : "token" })
-        // objectStore.createIndex("token", "token", { unique: false });
-        // objectStore.createIndex("email", "email", { unique: true });
+          var objectStore = evt.currentTarget.result.createObjectStore("form", { keyPath : "token" })
+          // objectStore.createIndex("token", "token", { unique: false });
+          // objectStore.createIndex("email", "email", { unique: true });
+        
+        }
       
-      }
-    }
-  }
+
+    // }else {
+    //   req.onsuccess = function(evt) {
+    //     dataBase.db = this.result; 
+    //     console.log("openDb DONE");
+    //   }
+    //   req.onupgradeneeded = (evt) => {
+        
+    //     var objectStore = evt.currentTarget.result.createObjectStore("form", { keyPath : "token" })
+    //     // objectStore.createIndex("token", "token", { unique: false });
+    //     // objectStore.createIndex("email", "email", { unique: true });
+      
+    //   }
+    // }
+  })()
   
   dataBase.getObjectStore = (store_name, mode) => {
     let tx = dataBase.db.transaction(store_name, mode);
     return tx.objectStore(store_name);
   }
-
+  dataBase.getAll = () => {
+    return new Promise((res) => {
+      if(dataBase.data.length > 0)
+     res(dataBase.data )
+      
+    })
+  }
   dataBase.get = () => {
     let tx = dataBase.db.transaction(['form'])
     let objStore = tx.objectStore('form');

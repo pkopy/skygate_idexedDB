@@ -18,7 +18,7 @@ class Input extends Component {
             subInput.type = type.value;
             subInputs.push({token, parentType: type.value, parentToken:this.props.input.token});
             subInput.subInputs = subInputs;
-            this.props.changeSubInput();
+            this.props.changeSubInput({token, parentType: type.value, parentToken:this.props.input.token});
         }else {
             alert('You must fill in all fields')
         }
@@ -35,7 +35,7 @@ class Input extends Component {
         let key = e.target.name;
         input[key] = e.target.value;
         
-        this.props.changeSubInput();
+        // this.props.changeSubInput();
     };
 
     render () {
